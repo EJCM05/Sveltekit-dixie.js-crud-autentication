@@ -2,6 +2,7 @@
 	import { onMount } from 'svelte';
 	import { goto } from '$app/navigation'; // <-- Usamos 'goto' (cliente)
 	import { userSession } from '$lib/store.js';
+	import { browser } from '$app/environment';
 
 	// $userSession es nuestro store reactivo.
 	// La página solo se mostrará si $userSession tiene datos.
@@ -17,10 +18,10 @@
 		}
 	});
 
-	// (Opcional) Esto hace que si el usuario cierra sesión
-	// en otra pestaña, esta también lo redirija.
+	// (Opcional) Sincroniza si se cierra sesión en otra pestaña
 	userSession.subscribe((session) => {
-		if (session === null) {
+		// Asegúrate de que esto solo corra en el navegador
+		if (browser && session === null) {
 			goto('/login');
 		}
 	});
